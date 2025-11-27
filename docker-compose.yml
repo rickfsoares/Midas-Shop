@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  catalog-service:
+    build: ./product-catalog-service
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: postgres-catalog
+      DB_USER: ${CATALOG_DB_USER}
+      DB_PASSWORD: ${CATALOG_DB_PASSWORD}
+      DB_NAME: ${CATALOG_DB_NAME}
+    depends_on:
+      - postgres-catalog
+
+  postgres-catalog:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${CATALOG_DB_USER}
+      POSTGRES_PASSWORD: ${CATALOG_DB_PASSWORD}
+      POSTGRES_DB: ${CATALOG_DB_NAME}
+    volumes:
+      - catalog_data:/var/lib/postgresql/data
+
+volumes:
+  catalog_data:
