@@ -1,0 +1,28 @@
+name: midas-shop
+
+services:
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: ${US_POSTGRES_DB}
+      POSTGRES_USER: ${US_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${US_POSTGRES_PASSWORD}
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - userservice_data:/var/lib/postgresql
+
+  userservice:
+    build: userservice
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - postgres    
+    
+volumes:
+  userservice_data:
